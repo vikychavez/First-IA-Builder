@@ -1,0 +1,14 @@
+# LiqPagoEstandar
+Aplicación que le genere un resumen de pago mensual estándar para el personal de casa de familias de clientes de un estudio contable
+
+## Stack
+- Angular 17.3.17 + SQL Server 2022
+- API en C# para consultas y escritura a la Base de Datos
+
+## Cómo correr
+ - Tests: `pytest -q`
+
+## Qué NO hacer
+- El borrador NUNCA afirma algo que no esté en `kb.md`: si no está, deriva a un humano (no inventa).
+- NO hardcodear la API key: va en `.env` como ANTHROPIC_API_KEY.
+- NO agregar features fuera del PRD 
