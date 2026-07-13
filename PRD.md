@@ -79,6 +79,7 @@ Personas:
 - **RF-29:** El sistema debe generar un archivo PDF por personal con el detalle de cada ítem calculado (horas normales, horas extras, antigüedad, feriados, zona desfavorable) y el total a pagar.
 - **RF-30:** El sistema debe permitir al usuario ejecutar una acción de envío que distribuya por correo electrónico, a cada Cliente con correo electrónico registrado, los PDF generados de su Personal a cargo para el período liquidado.
 - **RF-31:** El sistema debe conservar disponible el resumen de pago generado (RF-03) hasta que el usuario ejecute su envío (RF-30) o hasta que se genere un nuevo resumen para el mismo período.
+- **RF-32:** El archivo pdf debe tener en el encabezado el nombre, DNI, categoría y valor hora del personal
 
 ## Requerimientos No Funcionales
 
@@ -263,6 +264,8 @@ Personas:
 - **AC-41 (RF-31):** Dado un resumen de pago generado para un período,
   Cuando el usuario no ha ejecutado todavía la acción de envío (RF-30),
   Entonces el sistema mantiene disponible ese resumen para poder enviarlo, sin necesidad de volver a generarlo.
+
+  - **AC-42 (RF-32):** Dado un personal, cuando se genere el archivo pdf que tiene su resumen general de pago, entonces n el encabezado del archivo debe estar el nombre, DNI, categoría y el valor hora que tiene asignado según su categoría
 
 ## Fuera de Alcance
 
