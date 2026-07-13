@@ -1,0 +1,4 @@
+Las fórmulas están mucho mejor explicitadas. Para fortalecer el PRD, sumaría ejemplos numéricos concretos en los AC, así se puede comprobar que el cálculo da exactamente el resultado esperado.
+- Todavía aparece la API key de Anthropic, pero no queda claro qué parte usa IA. Si el sistema solo calcula por fórmulas, sacaría esa parte. Si la IA va a hacer algo, habría que decir exactamente qué.
+- Los criterios de aceptación todavía están más como condiciones de carga que como pruebas Dado/Cuando/Entonces. Los llevaría a casos concretos de cálculo.
+- Sumaria un RF claro para generar/enviar el PDF por cliente, porque aparece en los objetivos pero no queda desarrollado.
