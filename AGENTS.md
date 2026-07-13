@@ -4,7 +4,7 @@ Aplicación que genera un resumen de pago mensual estándar para el personal de 
 
 ## Referencias
 
-- @PRD-v2.md
+- @PRD.md
 
 ## Stack
 
