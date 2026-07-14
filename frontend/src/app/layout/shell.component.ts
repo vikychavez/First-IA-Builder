@@ -33,7 +33,6 @@ export class ShellComponent {
     { path: 'novedades', label: 'Novedades' },
     { path: 'clientes', label: 'Clientes' },
     { path: 'categorias', label: 'Categorías' },
-    { path: 'personal', label: 'Personal' },
     { path: 'zonas-desfavorables', label: 'Zonas Desfavorables' },
     { path: 'parametros', label: 'Parámetros' }
   ];
