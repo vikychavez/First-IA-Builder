@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dotnet --version)"
+      "Bash(dotnet --version)",
+      "Bash(command -v gh)",
+      "Bash(echo \"gh_exit=$?\")",
+      "Read(//home/viky_chavez/**)",
+      "Bash(git config *)",
+      "Bash(echo \"cred_exit=$?\")"
     ]
   }
 }

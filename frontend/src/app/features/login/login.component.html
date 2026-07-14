@@ -1,0 +1,38 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>LiqPagoEstandar</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="ingresar()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Usuario</mat-label>
+          <input matInput formControlName="nombreUsuario" autocomplete="username" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" formControlName="password" autocomplete="current-password" />
+        </mat-form-field>
+
+        @if (error()) {
+          <p class="error">{{ error() }}</p>
+        }
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="full-width"
+          [disabled]="form.invalid || cargando()"
+        >
+          @if (cargando()) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Ingresar
+          }
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,22 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #fafafa;
+}
+
+.login-card {
+  width: 320px;
+  padding: 8px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.error {
+  color: #b00020;
+  font-size: 0.875rem;
+}

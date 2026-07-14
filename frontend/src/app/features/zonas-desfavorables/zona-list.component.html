@@ -1,0 +1,29 @@
+<div class="list-header">
+  <h2>Zonas Desfavorables</h2>
+  <a mat-flat-button color="primary" routerLink="nuevo">
+    <mat-icon>add</mat-icon>
+    Nueva Zona
+  </a>
+</div>
+
+<table mat-table [dataSource]="zonas()" class="mat-elevation-z1">
+  <ng-container matColumnDef="provincia">
+    <th mat-header-cell *matHeaderCellDef>Provincia</th>
+    <td mat-cell *matCellDef="let zona">{{ zona.provincia }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let zona">
+      <a mat-icon-button [routerLink]="[zona.id, 'editar']" aria-label="Editar">
+        <mat-icon>edit</mat-icon>
+      </a>
+      <button mat-icon-button (click)="darDeBaja(zona)" aria-label="Dar de baja">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+  <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+</table>

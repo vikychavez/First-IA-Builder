@@ -11,7 +11,8 @@ public record Personal(
     Categoria Categoria,
     TipoRetiro TipoRetiro,
     string Provincia,
-    decimal HorasMensualesPactadas
+    decimal HorasMensualesPactadas,
+    bool Activo = true
 )
 {
     public decimal ValorHoraBase => Categoria.ValorHora(TipoRetiro);

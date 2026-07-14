@@ -8,7 +8,14 @@ public class GeneradorResumenTests
     private static readonly Categoria Categoria = new("Niñera", ValorHoraConRetiro: 1000m, ValorHoraSinRetiro: 800m);
     private static readonly DateOnly FechaActual = new(2026, 7, 8);
 
-    private static Personal CrearPersonal(string dni, string provincia) =>
+    private static readonly ParametrosLiquidacion Parametros = new(
+        PorcentajeAntiguedad: 0.01m,
+        PorcentajeZonaDesfavorable: 0.31m,
+        MultiplicadorHorasExtras: 1.50m,
+        MultiplicadorFeriados: 2m
+    );
+
+    private static Personal CrearPersonal(string dni, string provincia, bool activo = true) =>
         new(
             Dni: dni,
             ClienteId: "cliente-1",
@@ -20,7 +27,8 @@ public class GeneradorResumenTests
             Categoria: Categoria,
             TipoRetiro: TipoRetiro.SinRetiro,
             Provincia: provincia,
-            HorasMensualesPactadas: 192m
+            HorasMensualesPactadas: 192m,
+            Activo: activo
         );
 
     private static Novedad CrearNovedad(string dni) =>
@@ -33,7 +41,7 @@ public class GeneradorResumenTests
         var novedad = CrearNovedad("12345678");
         var zonaDesfavorable = new ZonaDesfavorable(["Chubut"]);
 
-        var resumen = GeneradorResumen.Generar(personal, novedad, zonaDesfavorable, FechaActual);
+        var resumen = GeneradorResumen.Generar(personal, novedad, zonaDesfavorable, FechaActual, Parametros);
 
         Assert.Equal(153_600m, resumen.SueldoBasicoNormal);
         Assert.Equal(144_000m, resumen.TotalHorasNormales);
@@ -52,7 +60,7 @@ public class GeneradorResumenTests
         var novedad = CrearNovedad("87654321");
         var zonaDesfavorable = new ZonaDesfavorable(["Chubut"]);
 
-        var resumen = GeneradorResumen.Generar(personal, novedad, zonaDesfavorable, FechaActual);
+        var resumen = GeneradorResumen.Generar(personal, novedad, zonaDesfavorable, FechaActual, Parametros);
 
         Assert.Equal(0m, resumen.ItemZonaDesfavorable);
         Assert.Equal(173_408m, resumen.TotalAPagar); // sin el item de zona desfavorable
@@ -80,11 +88,41 @@ public class GeneradorResumenTests
             zonaDesfavorable,
             anio: 2026,
             mes: 7,
-            FechaActual
+            FechaActual,
+            Parametros
         );
 
         Assert.Equal(2, resumenes.Count);
         Assert.All(resumenes, r => Assert.Equal(2026, r.Anio));
         Assert.All(resumenes, r => Assert.Equal(7, r.Mes));
+    }
+
+    [Fact] // AC-04: un Personal dado de baja (inactivo) no se incluye en el resumen generado
+    public void GenerarParaMes_ExcluyeAlPersonalInactivo()
+    {
+        var personales = new[]
+        {
+            CrearPersonal("12345678", provincia: "Chubut", activo: true),
+            CrearPersonal("87654321", provincia: "Buenos Aires", activo: false),
+        };
+        var novedades = new[]
+        {
+            CrearNovedad("12345678"),
+            CrearNovedad("87654321"),
+        };
+        var zonaDesfavorable = new ZonaDesfavorable(["Chubut"]);
+
+        var resumenes = GeneradorResumen.GenerarParaMes(
+            personales,
+            novedades,
+            zonaDesfavorable,
+            anio: 2026,
+            mes: 7,
+            FechaActual,
+            Parametros
+        );
+
+        Assert.Single(resumenes);
+        Assert.Equal("12345678", resumenes[0].Personal.Dni);
     }
 }

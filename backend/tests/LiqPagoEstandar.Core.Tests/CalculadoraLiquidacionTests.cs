@@ -7,6 +7,14 @@ public class CalculadoraLiquidacionTests
 {
     private static readonly Categoria Categoria = new("Niñera", ValorHoraConRetiro: 1000m, ValorHoraSinRetiro: 800m);
 
+    // Fixture con los valores regulatorios vigentes al momento de escribir los tests (RF-28).
+    private static readonly ParametrosLiquidacion Parametros = new(
+        PorcentajeAntiguedad: 0.01m,
+        PorcentajeZonaDesfavorable: 0.31m,
+        MultiplicadorHorasExtras: 1.50m,
+        MultiplicadorFeriados: 2m
+    );
+
     private static Personal CrearPersonal(DateOnly fechaIngreso, string provincia = "Buenos Aires") =>
         new(
             Dni: "12345678",
@@ -76,7 +84,7 @@ public class CalculadoraLiquidacionTests
     [Fact] // AC-13
     public void ItemAntiguedad_EsSueldoBasicoDivididoCienPorAnios()
     {
-        var resultado = CalculadoraLiquidacion.ItemAntiguedad(sueldoBasicoNormal: 153_600m, aniosAntiguedad: 3);
+        var resultado = CalculadoraLiquidacion.ItemAntiguedad(sueldoBasicoNormal: 153_600m, aniosAntiguedad: 3, Parametros);
 
         Assert.Equal(4_608m, resultado);
     }
@@ -91,7 +99,8 @@ public class CalculadoraLiquidacionTests
             sueldoBasicoNormal: 153_600m,
             itemAntiguedad: 4_608m,
             personal,
-            zonaDesfavorable
+            zonaDesfavorable,
+            Parametros
         );
 
         Assert.Equal(49_044.48m, resultado);
@@ -107,7 +116,8 @@ public class CalculadoraLiquidacionTests
             sueldoBasicoNormal: 153_600m,
             itemAntiguedad: 4_608m,
             personal,
-            zonaDesfavorable
+            zonaDesfavorable,
+            Parametros
         );
 
         Assert.Equal(0m, resultado);
@@ -118,7 +128,7 @@ public class CalculadoraLiquidacionTests
     {
         var personal = CrearPersonal(new DateOnly(2023, 7, 8));
 
-        var resultado = CalculadoraLiquidacion.ItemHorasExtras(personal, Novedad);
+        var resultado = CalculadoraLiquidacion.ItemHorasExtras(personal, Novedad, Parametros);
 
         Assert.Equal(12_000m, resultado);
     }
@@ -128,7 +138,7 @@ public class CalculadoraLiquidacionTests
     {
         var personal = CrearPersonal(new DateOnly(2023, 7, 8));
 
-        var resultado = CalculadoraLiquidacion.ItemFeriados(personal, Novedad);
+        var resultado = CalculadoraLiquidacion.ItemFeriados(personal, Novedad, Parametros);
 
         Assert.Equal(12_800m, resultado);
     }

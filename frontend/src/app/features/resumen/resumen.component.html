@@ -1,0 +1,130 @@
+<div class="list-header">
+  <h2>Resumen de Pago</h2>
+</div>
+
+<div class="periodo-selector">
+  <mat-form-field appearance="outline">
+    <mat-label>Mes</mat-label>
+    <mat-select [(ngModel)]="mes" (selectionChange)="cargar()">
+      @for (m of meses; track m.valor) {
+        <mat-option [value]="m.valor">{{ m.nombre }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Año</mat-label>
+    <mat-select [(ngModel)]="anio" (selectionChange)="cargar()">
+      @for (a of anios; track a) {
+        <mat-option [value]="a">{{ a }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" (click)="generar()" [disabled]="cargando()">
+    {{ resumen() ? 'Regenerar Resumen' : 'Generar Resumen' }}
+  </button>
+</div>
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+@if (resumen(); as r) {
+  <div class="list-header">
+    <p>
+      Estado: <strong>{{ r.estado }}</strong> — Generado el {{ r.fechaGeneracion | date: 'short' }}
+      @if (r.fechaEnvio) {
+        — Enviado el {{ r.fechaEnvio | date: 'short' }}
+      }
+    </p>
+
+    @if (r.estado === 'Generado') {
+      <button mat-flat-button color="primary" (click)="enviar()" [disabled]="enviando()">
+        Enviar por Email
+      </button>
+    }
+  </div>
+
+  @if (resultadoEnvio(); as resultado) {
+    <div class="resultado-envio">
+      @if (resultado.clientesEnviados.length > 0) {
+        <p class="success">Enviado a: {{ resultado.clientesEnviados.join(', ') }}</p>
+      }
+      @if (resultado.clientesSinEmail.length > 0) {
+        <p class="error">Sin email registrado: {{ resultado.clientesSinEmail.join(', ') }}</p>
+      }
+      @if (resultado.clientesConError.length > 0) {
+        <p class="error">Falló el envío (SMTP): {{ resultado.clientesConError.join(', ') }}</p>
+      }
+    </div>
+  }
+
+  <table mat-table [dataSource]="detallesOrdenados()" class="mat-elevation-z1">
+    <ng-container matColumnDef="cliente">
+      <th mat-header-cell *matHeaderCellDef>Cliente</th>
+      <td mat-cell *matCellDef="let d">{{ d.clienteNombre }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="personal">
+      <th mat-header-cell *matHeaderCellDef>Personal</th>
+      <td mat-cell *matCellDef="let d">{{ d.personalNombreCompleto }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="categoria">
+      <th mat-header-cell *matHeaderCellDef>Categoría</th>
+      <td mat-cell *matCellDef="let d">{{ d.categoriaNombre }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="valorHora">
+      <th mat-header-cell *matHeaderCellDef>Valor Hora</th>
+      <td mat-cell *matCellDef="let d">{{ d.valorHora | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalHorasNormales">
+      <th mat-header-cell *matHeaderCellDef>Horas Normales</th>
+      <td mat-cell *matCellDef="let d">{{ d.totalHorasNormales | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="itemHorasExtras">
+      <th mat-header-cell *matHeaderCellDef>Horas Extras</th>
+      <td mat-cell *matCellDef="let d">{{ d.itemHorasExtras | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="itemAntiguedad">
+      <th mat-header-cell *matHeaderCellDef>Antigüedad</th>
+      <td mat-cell *matCellDef="let d">{{ d.itemAntiguedad | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="itemFeriados">
+      <th mat-header-cell *matHeaderCellDef>Feriados</th>
+      <td mat-cell *matCellDef="let d">{{ d.itemFeriados | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="itemZonaDesfavorable">
+      <th mat-header-cell *matHeaderCellDef>Zona Desfavorable</th>
+      <td mat-cell *matCellDef="let d">{{ d.itemZonaDesfavorable | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalAPagar">
+      <th mat-header-cell *matHeaderCellDef>Total a Pagar</th>
+      <td mat-cell *matCellDef="let d">{{ d.totalAPagar | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="pdf">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let d">
+        @if (d.tienePdf) {
+          <a [href]="pdfUrl(d.personalId)" target="_blank" rel="noopener">PDF</a>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+  </table>
+
+  <p class="total-general">Total General: {{ totalGeneral() | number: '1.2-2' }}</p>
+} @else {
+  <p>No hay un resumen generado para este período todavía.</p>
+}

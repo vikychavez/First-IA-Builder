@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1816A305
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiqPagoEstandar.Core.Tests", "tests\LiqPagoEstandar.Core.Tests\LiqPagoEstandar.Core.Tests.csproj", "{9E36FF8E-16F7-49F5-B41B-171FBB7BE584}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiqPagoEstandar.Data", "src\LiqPagoEstandar.Data\LiqPagoEstandar.Data.csproj", "{DCC9CA4E-EA57-4254-8891-A89C372052EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiqPagoEstandar.Api", "src\LiqPagoEstandar.Api\LiqPagoEstandar.Api.csproj", "{C0DBFEE3-4802-4CB2-B8EA-907939A12C5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,9 +32,19 @@ Global
 		{9E36FF8E-16F7-49F5-B41B-171FBB7BE584}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E36FF8E-16F7-49F5-B41B-171FBB7BE584}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E36FF8E-16F7-49F5-B41B-171FBB7BE584}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCC9CA4E-EA57-4254-8891-A89C372052EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCC9CA4E-EA57-4254-8891-A89C372052EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCC9CA4E-EA57-4254-8891-A89C372052EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCC9CA4E-EA57-4254-8891-A89C372052EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0DBFEE3-4802-4CB2-B8EA-907939A12C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0DBFEE3-4802-4CB2-B8EA-907939A12C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0DBFEE3-4802-4CB2-B8EA-907939A12C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0DBFEE3-4802-4CB2-B8EA-907939A12C5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FA5494DC-6405-4732-9458-7F52B1966958} = {4D7F7F59-141A-4C11-9562-E07A22E1F5E8}
 		{9E36FF8E-16F7-49F5-B41B-171FBB7BE584} = {1816A305-8CAC-4392-B7D8-A22A584DC659}
+		{DCC9CA4E-EA57-4254-8891-A89C372052EA} = {4D7F7F59-141A-4C11-9562-E07A22E1F5E8}
+		{C0DBFEE3-4802-4CB2-B8EA-907939A12C5E} = {4D7F7F59-141A-4C11-9562-E07A22E1F5E8}
 	EndGlobalSection
 EndGlobal

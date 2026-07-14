@@ -6,20 +6,22 @@ public static class GeneradorResumen
         Personal personal,
         Novedad novedad,
         ZonaDesfavorable zonaDesfavorable,
-        DateOnly fechaActual
+        DateOnly fechaActual,
+        ParametrosLiquidacion parametros
     )
     {
         var sueldoBasicoNormal = CalculadoraLiquidacion.SueldoBasicoNormal(personal);
         var totalHorasNormales = CalculadoraLiquidacion.TotalHorasNormales(personal, novedad);
-        var itemHorasExtras = CalculadoraLiquidacion.ItemHorasExtras(personal, novedad);
+        var itemHorasExtras = CalculadoraLiquidacion.ItemHorasExtras(personal, novedad, parametros);
         var aniosAntiguedad = CalculadoraLiquidacion.AniosAntiguedad(personal, fechaActual);
-        var itemAntiguedad = CalculadoraLiquidacion.ItemAntiguedad(sueldoBasicoNormal, aniosAntiguedad);
-        var itemFeriados = CalculadoraLiquidacion.ItemFeriados(personal, novedad);
+        var itemAntiguedad = CalculadoraLiquidacion.ItemAntiguedad(sueldoBasicoNormal, aniosAntiguedad, parametros);
+        var itemFeriados = CalculadoraLiquidacion.ItemFeriados(personal, novedad, parametros);
         var itemZonaDesfavorable = CalculadoraLiquidacion.ItemZonaDesfavorable(
             sueldoBasicoNormal,
             itemAntiguedad,
             personal,
-            zonaDesfavorable
+            zonaDesfavorable,
+            parametros
         );
         var totalAPagar = CalculadoraLiquidacion.TotalAPagar(
             totalHorasNormales,
@@ -50,7 +52,8 @@ public static class GeneradorResumen
         ZonaDesfavorable zonaDesfavorable,
         int anio,
         int mes,
-        DateOnly fechaActual
+        DateOnly fechaActual,
+        ParametrosLiquidacion parametros
     )
     {
         var novedadesPorDni = novedades
@@ -58,8 +61,8 @@ public static class GeneradorResumen
             .ToDictionary(n => n.PersonalDni);
 
         return personales
-            .Where(p => novedadesPorDni.ContainsKey(p.Dni))
-            .Select(p => Generar(p, novedadesPorDni[p.Dni], zonaDesfavorable, fechaActual))
+            .Where(p => p.Activo && novedadesPorDni.ContainsKey(p.Dni))
+            .Select(p => Generar(p, novedadesPorDni[p.Dni], zonaDesfavorable, fechaActual, parametros))
             .ToList();
     }
 }
