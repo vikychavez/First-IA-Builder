@@ -17,7 +17,7 @@ export class ClienteListComponent implements OnInit {
   private readonly clienteService = inject(ClienteService);
 
   readonly clientes = signal<Cliente[]>([]);
-  readonly columnas = ['nombre', 'email', 'telefono', 'acciones'];
+  readonly columnas = ['dni', 'apellidoNombre', 'email', 'telefono', 'acciones'];
 
   ngOnInit(): void {
     this.cargar();
@@ -28,7 +28,7 @@ export class ClienteListComponent implements OnInit {
   }
 
   darDeBaja(cliente: Cliente): void {
-    if (!confirm(`¿Dar de baja a ${cliente.nombre}?`)) {
+    if (!confirm(`¿Dar de baja a ${cliente.apellido}, ${cliente.nombre}?`)) {
       return;
     }
     this.clienteService.baja(cliente.id).subscribe(() => this.cargar());

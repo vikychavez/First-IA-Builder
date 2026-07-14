@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Cliente, ClienteRequest } from './cliente.model';
+import { Cliente, ClienteRequest, Sexo } from './cliente.model';
 
 @Injectable({ providedIn: 'root' })
 export class ClienteService {
@@ -11,6 +11,10 @@ export class ClienteService {
 
   getAll(soloActivos = true): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.baseUrl, { params: { soloActivos } });
+  }
+
+  calcularCuit(dni: string, sexo: Sexo): Observable<{ cuit: string }> {
+    return this.http.get<{ cuit: string }>(`${this.baseUrl}/calcular-cuit`, { params: { dni, sexo } });
   }
 
   getById(id: number): Observable<Cliente> {

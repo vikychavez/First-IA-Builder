@@ -144,7 +144,7 @@ public class PersonalService : IPersonalService
             p.Id,
             p.Dni,
             p.ClienteId,
-            p.Cliente?.Nombre ?? string.Empty,
+            p.Cliente is null ? string.Empty : $"{p.Cliente.Apellido}, {p.Cliente.Nombre}",
             p.FechaIngreso,
             p.Apellido,
             p.Nombre,

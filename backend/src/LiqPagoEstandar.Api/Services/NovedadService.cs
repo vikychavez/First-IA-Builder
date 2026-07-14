@@ -36,7 +36,7 @@ public class NovedadService : INovedadService
                 return new NovedadDto(
                     p.Id,
                     p.Dni,
-                    p.Cliente?.Nombre ?? string.Empty,
+                    p.Cliente is null ? string.Empty : $"{p.Cliente.Apellido}, {p.Cliente.Nombre}",
                     $"{p.Apellido}, {p.Nombre}",
                     novedad?.HorasNormales ?? 0m,
                     novedad?.HorasFeriado ?? 0m,
@@ -77,7 +77,7 @@ public class NovedadService : INovedadService
         return new NovedadDto(
             personal.Id,
             personal.Dni,
-            personal.Cliente?.Nombre ?? string.Empty,
+            personal.Cliente is null ? string.Empty : $"{personal.Cliente.Apellido}, {personal.Cliente.Nombre}",
             $"{personal.Apellido}, {personal.Nombre}",
             novedad.HorasNormales,
             novedad.HorasFeriado,

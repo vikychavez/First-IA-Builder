@@ -1,5 +1,6 @@
 using LiqPagoEstandar.Api.DTOs;
 using LiqPagoEstandar.Api.Services;
+using LiqPagoEstandar.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LiqPagoEstandar.Api.Controllers;
@@ -21,6 +22,19 @@ public class ClientesController : ControllerBase
         return Ok(await _clienteService.GetAllAsync(soloActivos));
     }
 
+    [HttpGet("calcular-cuit")]
+    public ActionResult<object> CalcularCuit([FromQuery] string dni, [FromQuery] string sexo)
+    {
+        try
+        {
+            return Ok(new { cuit = CalculadoraCuit.Calcular(dni, sexo) });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { mensaje = ex.Message });
+        }
+    }
+
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ClienteDto>> GetById(int id)
     {
@@ -31,15 +45,29 @@ public class ClientesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ClienteDto>> Create(ClienteRequest request)
     {
-        var cliente = await _clienteService.CreateAsync(request);
-        return CreatedAtAction(nameof(GetById), new { id = cliente.Id }, cliente);
+        var respuesta = await _clienteService.CreateAsync(request);
+        return respuesta.Resultado switch
+        {
+            GuardarClienteResultado.DniDuplicado => BadRequest(new
+            {
+                mensaje = "El DNI es obligatorio y debe ser único entre los clientes activos."
+            }),
+            _ => CreatedAtAction(nameof(GetById), new { id = respuesta.Cliente!.Id }, respuesta.Cliente)
+        };
     }
 
     [HttpPut("{id:int}")]
     public async Task<ActionResult<ClienteDto>> Update(int id, ClienteRequest request)
     {
-        var cliente = await _clienteService.UpdateAsync(id, request);
-        return cliente is null ? NotFound() : Ok(cliente);
+        var respuesta = await _clienteService.UpdateAsync(id, request);
+        return respuesta.Resultado switch
+        {
+            GuardarClienteResultado.DniDuplicado => BadRequest(new
+            {
+                mensaje = "El DNI es obligatorio y debe ser único entre los clientes activos."
+            }),
+            _ => respuesta.Cliente is null ? NotFound() : Ok(respuesta.Cliente)
+        };
     }
 
     [HttpPost("{id:int}/baja")]

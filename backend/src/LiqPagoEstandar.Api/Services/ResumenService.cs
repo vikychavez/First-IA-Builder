@@ -91,7 +91,7 @@ public class ResumenService : IResumenService
             {
                 PersonalId = personalEntity.Id,
                 ClienteId = personalEntity.ClienteId,
-                ClienteNombre = personalEntity.Cliente?.Nombre ?? string.Empty,
+                ClienteNombre = personalEntity.Cliente is null ? string.Empty : $"{personalEntity.Cliente.Apellido}, {personalEntity.Cliente.Nombre}",
                 PersonalNombreCompleto = $"{personalEntity.Apellido}, {personalEntity.Nombre}",
                 Dni = personalEntity.Dni,
                 CategoriaNombre = personalEntity.Categoria?.Nombre ?? string.Empty,

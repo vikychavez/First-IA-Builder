@@ -26,7 +26,7 @@ Personas:
 
 ### Mantenimiento de Clientes
 
-- **RF-04:** El sistema debe permitir al usuario registrar un Cliente del estudio contable.
+- **RF-04:** El sistema debe permitir al usuario registrar un Cliente del estudio contable (DNI, sexo, apellido, nombre, fecha de nacimiento, correo electrónico, teléfono, dirección), calculando el CUIT automáticamente a partir del DNI y el sexo (ver RF-33).
 - **RF-05:** El sistema debe permitir al usuario modificar los datos de un Cliente.
 - **RF-06:** El sistema debe permitir al usuario dar de baja (lógica) a un Cliente, marcándolo inactivo sin eliminar sus datos.
 
@@ -80,6 +80,7 @@ Personas:
 - **RF-30:** El sistema debe permitir al usuario ejecutar una acción de envío que distribuya por correo electrónico, a cada Cliente con correo electrónico registrado, los PDF generados de su Personal a cargo para el período liquidado.
 - **RF-31:** El sistema debe conservar disponible el resumen de pago generado (RF-03) hasta que el usuario ejecute su envío (RF-30) o hasta que se genere un nuevo resumen para el mismo período.
 - **RF-32:** El archivo pdf debe tener en el encabezado el nombre, DNI, categoría y valor hora del personal
+- **RF-33:** El sistema debe solicitar el DNI como primer dato a ingresar en el alta de un Cliente, y calcular automáticamente el CUIT a partir del DNI y el sexo del Cliente.
 
 ## Requerimientos No Funcionales
 
@@ -104,13 +105,13 @@ Personas:
   Cuando el usuario genera el resumen de pago del mes,
   Entonces el sistema no lo incluye en el resumen generado.
 
-- **AC-05 (RF-04):** Dado un usuario que completa el formulario de alta de un Cliente con nombre y correo electrónico,
+- **AC-05 (RF-04, RF-33):** Dado un usuario que completa el formulario de alta de un Cliente con todos los datos obligatorios (DNI, sexo, apellido, nombre, fecha de nacimiento, correo electrónico),
   Cuando guarda el registro,
-  Entonces el sistema crea el Cliente y lo muestra en el listado de clientes activos.
+  Entonces el sistema calcula automáticamente el CUIT a partir del DNI y el sexo, crea el Cliente, y lo muestra en el listado de clientes activos.
 
-- **AC-06 (RF-04, RF-05):** Dado que el usuario completa el formulario de alta o edición de un cliente sin ingresar correo electrónico,
+- **AC-06 (RF-04, RF-05):** Dado que el usuario completa el formulario de alta o edición de un cliente sin ingresar alguno de los campos obligatorios (DNI, sexo, apellido, nombre, fecha de nacimiento o correo electrónico),
   Cuando intenta guardar el registro,
-  Entonces el sistema rechaza la operación y muestra un mensaje indicando que el correo electrónico es obligatorio.
+  Entonces el sistema rechaza la operación y muestra un mensaje indicando qué campo obligatorio falta completar.
 
 - **AC-07 (RF-05):** Dado un Cliente existente,
   Cuando el usuario modifica sus datos y guarda,
@@ -266,6 +267,18 @@ Personas:
   Entonces el sistema mantiene disponible ese resumen para poder enviarlo, sin necesidad de volver a generarlo.
 
   - **AC-42 (RF-32):** Dado un personal, cuando se genere el archivo pdf que tiene su resumen general de pago, entonces n el encabezado del archivo debe estar el nombre, DNI, categoría y el valor hora que tiene asignado según su categoría
+
+- **AC-43 (RF-04, RF-05):** Dado que el usuario completa el formulario de alta o edición de un cliente con un DNI que ya existe en otro Cliente activo,
+  Cuando intenta guardar el registro,
+  Entonces el sistema rechaza la operación y muestra un mensaje indicando que el DNI debe ser único entre los clientes activos.
+
+- **AC-44 (RF-33):** Dado un usuario que abre el formulario de alta de un Cliente,
+  Cuando visualiza los campos a completar,
+  Entonces el campo DNI aparece como el primer dato a ingresar del formulario.
+
+- **AC-45 (RF-33):** Dado un usuario que ingresó el DNI y el sexo de un Cliente en el formulario de alta,
+  Cuando el sistema calcula el CUIT correspondiente,
+  Entonces el campo CUIT se completa automáticamente sin que el usuario deba ingresarlo de forma manual.
 
 ## Fuera de Alcance
 
